@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import {HomeScreen} from './screens/Home';
+import {FullPostScreen} from './screens/FullPost'
+import { View, StatusBar, Text, TextInput } from 'react-native'; 
+import { Navigation } from './screens/Navigation';
+import { AuthScreen } from './screens/Auth'
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+  
+
+  // if(!isAuth){
+  //   return (
+  //     // <View>
+  //       <TextInput
+  //         placeholder='Email'
+  //       />
+  //     // </View>
+  //     );
+  // };
+  // if(!isAuth){
+    return <AuthScreen/>
+  // }
+
+  // return <Navigation/>;
+  // return (<View>
+  //   <FullPostScreen/>
+  // </View>)
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+// getResource('https://jsonplaceholder.typicode.com/posts/1');
+// const getResource = async(url) => {
+//   const response = await fetch(url);
+//   console.log(response);
+// }
