@@ -1,34 +1,22 @@
 import React from 'react';
 import {HomeScreen} from './screens/Home';
 import {FullPostScreen} from './screens/FullPost'
-import { View, StatusBar, Text, TextInput } from 'react-native'; 
+import { View, StatusBar, Text, TextInput, StyleSheet } from 'react-native'; 
 import { Navigation } from './screens/Navigation';
-import { AuthScreen } from './screens/Auth'
+import { useFonts } from 'expo-font';
+
 
 export default function App() {
-  
 
-  // if(!isAuth){
-  //   return (
-  //     // <View>
-  //       <TextInput
-  //         placeholder='Email'
-  //       />
-  //     // </View>
-  //     );
-  // };
-  // if(!isAuth){
-    return <AuthScreen/>
-  // }
+  const [fontsLoaded] = useFonts({
+    'Roboto-Black': require('./assets/fonts/Roboto/Roboto-Black.ttf'),
+    'Roboto-Medium': require('./assets/fonts/Roboto/Roboto-Medium.ttf'),
+  });
 
-  // return <Navigation/>;
-  // return (<View>
-  //   <FullPostScreen/>
-  // </View>)
+  if (!fontsLoaded) {
+    return null;
+  }
+  return<Navigation/>;
 }
 
-// getResource('https://jsonplaceholder.typicode.com/posts/1');
-// const getResource = async(url) => {
-//   const response = await fetch(url);
-//   console.log(response);
-// }
+

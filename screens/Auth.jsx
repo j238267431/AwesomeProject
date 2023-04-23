@@ -19,7 +19,6 @@ import { Loading } from '../components/Loading';
 import {HomeScreen} from './Home';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 const Wrapper = styled.View`
    padding: 10px;
    width:100%;
@@ -50,7 +49,15 @@ export const AuthScreen = ({ navigation }) => {
   const [name, setname] = React.useState();
   const [password, setPassword] = React.useState();
   const [isAuth, setIsAuth] = React.useState(false);
-  
+
+
+  const Header = styled.View`
+    flex: 0.1;
+    // hieght: 10px;
+    width: 100%;
+    background-color: #74992e;
+`;
+
   const  makeAuth = () => {
     setisLoading(true);
     console.log('authName', name)
@@ -84,23 +91,37 @@ export const AuthScreen = ({ navigation }) => {
 
   // "company/api/client.php?class=payment-result&method=handle"
 
-
-//   React.useEffect(fetchPosts, []) 
+  React.useEffect(() => {
+    setIsAuth(false);
+    if(isAuth){
+      // return <HomeScreen
+      //   name={name}
+      //   password={password}
+      // />
+      // return <Navigation/>
+      navigation.navigate('Home', {nameR:name});
+    }
+  }, [isAuth]) 
+  // React.useEffect(fetchPosts, []) 
 if(isLoading) {
   return <Loading/>
  }
 
-if(isAuth){
-  return <HomeScreen
-    name={name}
-    password={password}
-  />
-}
+// if(isAuth){
+//   // return <HomeScreen
+//   //   name={name}
+//   //   password={password}
+//   // />
+//   // return <Navigation/>
+//   navigation.navigate('Home', {nameR:name});
+// }
 
 
   return (
-    <Wrapper>
+    <>
 
+    <Wrapper>
+      
       <TextInputAuth
          placeholder="Name"
          value={name}
@@ -116,18 +137,12 @@ if(isAuth){
         onPress={makeAuth}
          title="Log in"
       />
-      <Button
-        //  onPress={makeAuth}
-        // onPress={retrieveData}
-         title="retrieveData"
-      />
-
-
-
 
    </Wrapper>
-    
+   </>
   );
+
+  
 }
 
 // getResource('https://jsonplaceholder.typicode.com/posts/1');
@@ -135,3 +150,5 @@ if(isAuth){
 //   const response = await fetch(url);
 //   console.log(response);
 // }
+
+
