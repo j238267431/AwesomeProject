@@ -13,8 +13,8 @@ export const Navigation = () => {
    return (
    <NavigationContainer>
       <Stack.Navigator>
-         <Stack.Screen name="Auth" component={AuthScreen} options={{title: 'Authorisation'}}/>
-         <Stack.Screen name="Home" component={HomeScreen} options={{title: 'Barcode input', headerBackVisible: false}}/>
+         <Stack.Screen name="Auth" component={AuthScreen} options={{title: 'Авторизация'}}/>
+         <Stack.Screen name="Home" component={HomeScreen} options={{title: 'Штрихкод', headerBackVisible: false}}/>
          <Stack.Screen name="Product" component={ProductScreen} options={{title: 'Product'}}/>
          <Stack.Screen name="Header" component={Header} options={{title: 'Header'}}/>
          {/* <Stack.Screen name="FullPost" component={FullPostScreen} options={{title: 'Article'}}/> */}

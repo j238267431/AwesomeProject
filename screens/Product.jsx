@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, Text, StyleSheet } from 'react-native';
+import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
 import styled from 'styled-components/native';
 import axios from 'axios';
 import { Loading } from '../components/Loading';
@@ -10,17 +10,19 @@ export const ProductScreen = ({route, navigation}) => {
    const [isLoading, setisLoading] = React.useState(true);
    const [items, setItems] = React.useState();
    const {price, name, itemData} = route.params;
-
+   console.log(itemData.picture);
+   
    return (
       <>
       <Header
          navigation={navigation}
          name={name}
       />
-         <View style={styles.wrapper}>
+         <ScrollView style={styles.wrapper}>
             <View style={styles.imageNameWrapper}>
                <Image
-                  source={require('../assets/coke.png')}
+                  style={styles.tinyLogo}
+                  source={{uri: itemData.picture}}
                />
                <View style={styles.nameWrapper}>
                   <Text style={styles.productName}>{itemData.name}</Text>
@@ -42,13 +44,14 @@ export const ProductScreen = ({route, navigation}) => {
                   {itemData.description}
                </Text>
             </View>
-         </View>
+         </ScrollView>
       </>
    )
 }
 
 const styles = StyleSheet.create({
    wrapper:{
+      overflow: 'scroll',
       backgroundColor: 'white',
       flex:1,
       paddingTop: 12,
@@ -77,8 +80,8 @@ const styles = StyleSheet.create({
    },
    productPriceBlock:{
       backgroundColor: '#219653',
-      borderTopLeftRadius: '50',
-      borderBottomRightRadius: '50',
+      borderTopLeftRadius: 50,
+      borderBottomRightRadius: 50,
       // flex:0.1,
       justifyContent: "center",
       alignItems: "center",
@@ -106,6 +109,10 @@ const styles = StyleSheet.create({
       fontSize: 14,
       fontWeight: 400,
       fontFamily: 'Roboto-Medium',
+   },
+   tinyLogo:{
+      width: 150,
+      height: 150
    }
 
 })

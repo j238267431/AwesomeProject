@@ -10,6 +10,7 @@ import {
    RefreshControl, 
    TouchableOpacity,
    Button,
+   Dimensions,
 } from 'react-native';
 import styled from 'styled-components/native';
 import { Post } from '../components/Post';
@@ -49,7 +50,9 @@ export const AuthScreen = ({ navigation }) => {
   const [name, setname] = React.useState();
   const [password, setPassword] = React.useState();
   const [isAuth, setIsAuth] = React.useState(false);
-
+  const [isPortrait, setIsPortrait] = React.useState();
+  const [error, setError] = React.useState();
+  // console.log(Dimensions.get('screen'));
 
   const Header = styled.View`
     flex: 0.1;
@@ -58,6 +61,15 @@ export const AuthScreen = ({ navigation }) => {
     background-color: #74992e;
 `;
 
+Dimensions.addEventListener('change', () => {
+  var dim = Dimensions.get('screen');
+  setIsPortrait(dim.height >= dim.width ? 'portrait' : 'landscape')
+  // this.setState({
+  //   orientation: isPortrait() ? 'portrait' : 'landscape'
+  // });
+  
+});
+console.log(isPortrait);
   const  makeAuth = () => {
     setisLoading(true);
     console.log('authName', name)
@@ -77,21 +89,22 @@ export const AuthScreen = ({ navigation }) => {
     .then(({ data }) => {
       setIsAuth(data.auth)
       setItems(data);
-      console.log(items);
+      setError(data.errors);
     })
     .catch(err => {
       console.log('err', err);
-      Alert.alert('Error', 'no articles received');
+      Alert.alert('Ошибка', err);
     }).finally(() => {
       setisLoading(false);
     })
   }
 
-
+  console.log('errorsLenth', error)
 
   // "company/api/client.php?class=payment-result&method=handle"
 
-  React.useEffect(() => {
+  React.useEffect(
+    () => {
     setIsAuth(false);
     if(isAuth){
       // return <HomeScreen
@@ -119,23 +132,32 @@ if(isLoading) {
 
   return (
     <>
-
+    
     <Wrapper>
-      
-      <TextInputAuth
+    <View style={styles.inputWrapper}>
+      <TextInput
+         style={styles.barCodeInput}
+         placeholderTextColor="#2F80ED"
          placeholder="Name"
          value={name}
          onChangeText={setname}
       />
-        <TextInputAuth
+      <TextInput
+         style={styles.barCodeInput}
+         placeholderTextColor="#2F80ED"
          placeholder="Password"
          value={password}
          onChangeText={setPassword}
       />
+      <Text style={styles.errorText}>{error}</Text>
+    </View>
+
+
+    
       <Button
         //  onPress={makeAuth}
         onPress={makeAuth}
-         title="Log in"
+         title="Войти"
       />
 
    </Wrapper>
@@ -144,11 +166,37 @@ if(isLoading) {
 
   
 }
-
-// getResource('https://jsonplaceholder.typicode.com/posts/1');
-// const getResource = async(url) => {
-//   const response = await fetch(url);
-//   console.log(response);
-// }
+const styles = StyleSheet.create({
+  errorText:{
+    color: 'red',
+    marginTop: 20,
+    fontWeight: 'bold',
+    fontSize: 20
+  },  
+  barCodeInput:{
+    height: 20,
+    zIndex:111,
+    color: '#2F80ED',
+    fontSize:20,
+    width: 250,
+    height: 50,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    textAlign: 'center',
+    padding: 5,
+    marginBottom: 10
+  },  
+  inputWrapper:{
+    backgroundColor: '#219653',
+    borderTopLeftRadius: 50,
+    borderBottomRightRadius: 50,
+    // flex:0.1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 300,
+    height: 200,
+    marginBottom:10,
+  },
+})
 
 
