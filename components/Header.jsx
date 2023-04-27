@@ -9,10 +9,16 @@ export const Header = ( {navigation, name} ) => {
    <View style={styles.header}>
       <View style={styles.headerWrapper}>
          <Feather style={styles.menu} name="menu" size={24} color="white" />
-         <Text style={styles.headerText}>Проверка цен</Text>
-         <MaterialCommunityIcons onPress={() => {
+         {/* <Text style={styles.headerText}>Проверка цен</Text> */}
+         <MaterialCommunityIcons
+          onPress={() => {
             navigation.navigate('Home', {nameR:name});
-         }} style={styles.headerScan} name="barcode-scan" size={24} color="white" />
+          }} 
+          style={styles.headerScan} 
+          name="barcode-scan" 
+          size={24} 
+          color="white" 
+         />
       </View>
    </View>
   );

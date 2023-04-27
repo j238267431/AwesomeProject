@@ -1,7 +1,4 @@
 import React from 'react';
-import {HomeScreen} from './screens/Home';
-import {FullPostScreen} from './screens/FullPost'
-import { View, StatusBar, Text, TextInput, StyleSheet } from 'react-native'; 
 import { Navigation } from './screens/Navigation';
 import { useFonts } from 'expo-font';
 
@@ -18,5 +15,4 @@ export default function App() {
   }
   return<Navigation/>;
 }
-
 

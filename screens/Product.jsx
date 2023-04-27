@@ -1,8 +1,5 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
-import styled from 'styled-components/native';
-import axios from 'axios';
-import { Loading } from '../components/Loading';
 import { Header } from '../components/Header';
 
 
@@ -14,10 +11,10 @@ export const ProductScreen = ({route, navigation}) => {
    
    return (
       <>
-      <Header
+      {/* <Header
          navigation={navigation}
          name={name}
-      />
+      /> */}
          <ScrollView style={styles.wrapper}>
             <View style={styles.imageNameWrapper}>
                <Image

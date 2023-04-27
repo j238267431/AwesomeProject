@@ -1,11 +1,8 @@
-import { StyleSheet, Text, Image, View, Alert, Button, ScrollView, ActivityIndicator, RefreshControl, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, Image, View, Alert, Button, ScrollView, TextInput } from 'react-native';
 import styled from 'styled-components/native';
-import { Post } from '../components/Post';
 import axios from 'axios';
 import React from 'react';
 import { Loading } from '../components/Loading';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Header } from '../components/Header';
 
 const Wrapper = styled.View`
@@ -25,38 +22,43 @@ const TextInputAuth = styled.TextInput`
 `;
 
 
-export const HomeScreen = ({ navigation, name, password, route }) => {
+export const HomeScreen = ({ navigation, route }) => {
   const [isLoading, setisLoading] = React.useState(false);
-  const [items, setItems] = React.useState();
-  // const [name, setName] = React.useState();
-  // const [password, setPassword] = React.useState();
   const [barcode, setBarcode] = React.useState();
   const [price, setPrice] = React.useState();
   const [itemData, setItemData] = React.useState();
-  const [isAuth, setisAuth] = React.useState(true);
   const [isProductPage, setisProductPage] = React.useState(false);
-  const {nameR} = route.params;
+  const [isAuthPage, setisAuthPage] = React.useState(false);
+  // const {nameR} = route.params;
   const [error, setError] = React.useState();
-  const logout = () => {
-    console.log('logout');
-    setisAuth(false);
-  }
-  if(!isAuth){
-    // return <AuthScreen/>
-  }
 
+  const logout = () => {
+    setisLoading(true);
+    axios
+     .get("https://test2.isoftik.kz/login.php?do=logout")
+     .then(({ data }) => {
+        console.log('logout', data);
+        setisAuthPage(true);
+     })
+     
+     .catch(err => {
+       console.log('err', err);
+       Alert.alert('Ошибка', err);
+     }).finally(() => {
+       setisLoading(false);
+     })
+   }
 
   const getData = () => {
-    // await retrieveData();
-    console.log('props', nameR);
+    // console.log('props', nameR);
     console.log('barcode', barcode);
     setisLoading(true);
     axios
-     .post("https://test2.isoftik.kz/company/api/pricecheckerAuth.php?class=ChargeanywhereApi&method=getData", 
+     .post("https://test2.isoftik.kz/company/ajax.php",
      {
-       password:password,
-       name: nameR,
-       barcode: barcode
+        class: 'PriceChecker',
+        method: 'getData',
+        barcode: barcode
     },
      {
        headers: {
@@ -64,9 +66,6 @@ export const HomeScreen = ({ navigation, name, password, route }) => {
      }
     })
      .then(({ data }) => {
-      // if(typeof ){
-
-      // }
       if(data != false){
         setPrice(data[0].price);
         setItemData(data[0]);
@@ -77,11 +76,7 @@ export const HomeScreen = ({ navigation, name, password, route }) => {
       }
 
       console.log('dataPrice', data);
-      
-      //  setPrice(data[0].price);
-      //  setItemData(data[0]);
-      //  console.log('data', data[0].price);
-      //  setisLoading(false);
+
      })
      .catch(err => {
        console.log('err', err);
@@ -97,21 +92,18 @@ export const HomeScreen = ({ navigation, name, password, route }) => {
    const goToProductPage = () => {
     setisProductPage(false)
     if(isProductPage){
-      navigation.navigate('Product', {price:price, name:nameR, itemData:itemData});
+      navigation.navigate('Product', {itemData:itemData});
      }
    }
 
-   
-   const changeUser = () => {
-    navigation.navigate('Auth', {auth: false});
+   const goToAuthPage = () => {
+    setisProductPage(false)
+    if(isAuthPage){
+      navigation.navigate('Auth');
+     }
    }
-
-
-  // "company/api/client.php?class=payment-result&method=handle"
-
-
   React.useEffect(goToProductPage, [isProductPage]) 
-  // React.useEffect(setName(name), [])
+  React.useEffect(goToAuthPage, [isAuthPage]) 
 
 
   if(isLoading) {
@@ -120,17 +112,10 @@ export const HomeScreen = ({ navigation, name, password, route }) => {
 
   return (
     <ScrollView style={styles.homeWrapper}>
-      <Header
+      {/* <Header
         navigation={navigation}
-        name={nameR}
-      />
-      {/* <View style={styles.header}>
-      <View style={styles.headerWrapper}>
-          <Feather style={styles.menu} name="menu" size={24} color="white" />
-          <Text style={styles.headerText}>Проверка цен</Text>
-          <MaterialCommunityIcons style={styles.headerScan} name="barcode-scan" size={24} color="white" />
-      </View>
-    </View> */}
+        // name={nameR}
+      /> */}
       <View style={styles.imageWrapper}>
         <Image
           style={styles.homeImage}
@@ -158,13 +143,13 @@ export const HomeScreen = ({ navigation, name, password, route }) => {
           onPress={getData}
           title="Проверить"
         />
-        </View>
-        <View style={styles.buttonWrapper}>
         <Button
           style={styles.barcodeButton}
-          onPress={changeUser}
-          title="Сменить пользователя"
+          onPress={logout}
+          title="выход"
         />
+        </View>
+        <View style={styles.buttonWrapper}>
         </View>
       </View>
     </ScrollView>
