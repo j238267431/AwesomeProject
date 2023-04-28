@@ -1,12 +1,14 @@
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeScreen } from "./Home";
 import { NavigationContainer } from "@react-navigation/native";
 import { AuthScreen } from "./Auth";
 import { ProductScreen } from './Product';
 import { Header } from "../components/Header";
-import { StyleSheet, Button, Text, View } from 'react-native'; 
+import { StyleSheet, Button, Text, View, Modal } from 'react-native'; 
 import React from 'react';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import ModalMenu from "../components/ModalMenu";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +16,8 @@ export const Navigation = () => {
 
 
    const openModal = () => {
-
+      console.log('modal');
+      // setModalVisible(true)
    }
 
 
@@ -50,8 +53,12 @@ if(true){
 
 
    return (
-   <NavigationContainer>
-      <Stack.Navigator>
+
+      <Stack.Navigator
+  
+      
+      >
+
          <Stack.Group
             // screenOptions={{ 
             //    title: 'Проверка цен',
@@ -71,7 +78,20 @@ if(true){
                }
              })}
              >
-            <Stack.Screen name="Auth" component={AuthScreen} options={{
+            <Stack.Screen name="Auth" component={AuthScreen} 
+    
+               screenListeners={({ navigation }) => ({
+                  state: (e) => {
+                     // Do something with the state
+                     console.log('state changed', e.data);
+
+                     // Do something with the `navigation` object
+                     if (!navigation.canGoBack()) {
+                     console.log("we're on the initial screen");
+                     }
+                  },
+               })}
+            options={{
                headerLeft: () => (
                   menuImage()
                ),
@@ -116,8 +136,7 @@ if(true){
 
             <Stack.Screen name="Header" component={Header} options={{title: 'Header'}}/>
          </Stack.Group>
-      </Stack.Navigator>
-   </NavigationContainer>);
+      </Stack.Navigator>);
 
 }
 
