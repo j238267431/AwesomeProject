@@ -1,9 +1,10 @@
-import { StyleSheet, Text, Image, View, Alert, Button, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, Image, View, Alert, Button, ScrollView, TextInput, Pressable } from 'react-native';
 import styled from 'styled-components/native';
 import axios from 'axios';
 import React from 'react';
 import { Loading } from '../components/Loading';
 import { Header } from '../components/Header';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const Wrapper = styled.View`
    padding: 10px;
@@ -68,14 +69,14 @@ export const HomeScreen = ({ navigation, route }) => {
      .then(({ data }) => {
       if(data != false){
         setPrice(data[0].price);
-        setItemData(data[0]);
+        setItemData(data);
         setisProductPage(true);
         setError('');
       } else {
         setError('Товар с таким штрихкодом не найден');
       }
 
-      console.log('dataPrice', data);
+      // console.log('dataPrice', data);
 
      })
      .catch(err => {
@@ -137,17 +138,17 @@ export const HomeScreen = ({ navigation, route }) => {
           />
         </View>
         </View>
-        <View style={styles.buttonWrapper}>
-        <Button
-          style={styles.barcodeButton}
-          onPress={getData}
-          title="Проверить"
-        />
-        <Button
-          style={styles.barcodeButton}
-          onPress={logout}
-          title="выход"
-        />
+        <View style={styles.centeredView}>
+        <Pressable
+        style={({pressed}) => [{
+          backgroundColor: pressed ? 'rgb(210, 230, 255)' : '#219653',
+        }, 
+            styles.button, styles.buttonOpen
+          ]
+        }
+        onPress={getData}>
+        <Text style={styles.textStyle}>Проверить</Text>
+      </Pressable>
         </View>
         <View style={styles.buttonWrapper}>
         </View>
@@ -156,6 +157,25 @@ export const HomeScreen = ({ navigation, route }) => {
   );
 }
 const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  
+  button: {
+    borderRadius: 10,
+    paddingHorizontal: 40,
+    paddingVertical: 20,
+    marginTop: 20,
+    elevation: 2,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   errorText:{
     color: 'red',
     marginTop: 20,

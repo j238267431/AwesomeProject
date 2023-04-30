@@ -8,17 +8,11 @@ import { Header } from "../components/Header";
 import { StyleSheet, Button, Text, View, Modal } from 'react-native'; 
 import React from 'react';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-import ModalMenu from "../components/ModalMenu";
+import ModalMenuScreen from "./ModalMenu";
 
 const Stack = createNativeStackNavigator();
 
 export const Navigation = () => {
-
-
-   const openModal = () => {
-      console.log('modal');
-      // setModalVisible(true)
-   }
 
 
    const barCodeImage = (navigation) => {
@@ -33,23 +27,9 @@ export const Navigation = () => {
       />
    }
    const menuImage = (navigation) => {
-      return <Feather 
-         style={styles.menu} 
-         name="menu" 
-         size={24} 
-         color="white" 
-         onPress={openModal}
-      />
+      return 
    }
 
-// devtest2
-if(true){
-   <View style={styles.modal}>
-   <Text>
-      modal
-   </Text>
-   </View>
-}
 
 
    return (
@@ -75,7 +55,8 @@ if(true){
                headerTitleStyle: {
                fontWeight: 'bold',
                fontSize: 20
-               }
+               },
+               headerTitleAlign: 'center'
              })}
              >
             <Stack.Screen name="Auth" component={AuthScreen} 
@@ -104,7 +85,15 @@ if(true){
                
             <Stack.Screen name="Home" component={HomeScreen} options={({navigation}) => ({
                 headerLeft: () => (
-                  menuImage(navigation)
+                  <Feather 
+                     style={styles.menu} 
+                     name="menu" 
+                     size={24} 
+                     color="white" 
+                     onPress={() => {
+                        navigation.navigate('ModalMenu');
+                     }}
+                  />
                ),
                headerBackVisible: false, 
                headerStyle: {
@@ -135,6 +124,9 @@ if(true){
 
 
             <Stack.Screen name="Header" component={Header} options={{title: 'Header'}}/>
+         </Stack.Group>
+         <Stack.Group screenOptions={{ presentation: 'modal' }}>
+            <Stack.Screen name="ModalMenu" component={ModalMenuScreen} options={{title: 'Меню'}} />
          </Stack.Group>
       </Stack.Navigator>);
 

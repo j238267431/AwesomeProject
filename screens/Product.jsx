@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Image, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { Header } from '../components/Header';
 
 
@@ -7,41 +7,49 @@ export const ProductScreen = ({route, navigation}) => {
    const [isLoading, setisLoading] = React.useState(true);
    const [items, setItems] = React.useState();
    const {price, name, itemData} = route.params;
-   console.log(itemData.picture);
+   // console.log('product', itemData);
+
+   const Item = ({item}) => {
+      // console.log('fuck', item.articul)
+      return (
+         
+      <View style={styles.wrapper}>
+         <View style={styles.imageNameWrapper}>
+            <Image
+               style={styles.tinyLogo}
+               source={{uri: item.picture}}
+            />
+            <View style={styles.nameWrapper}>
+               <Text style={styles.productName}>{item.name}</Text>
+            </View>  
+         </View>
+         <View style={styles.productPriceBlockWrapper}>
+            <View style={styles.productPriceBlock}>
+               <Text style={styles.productPriceText}>{item.price}</Text>
+            </View>
+         </View>
+         <View style={styles.productPriceBlockWrapper}>
+            <View style={styles.barCodeArticulWrapper}>
+               <Text style={styles.barCodeArticul}>{item.mainShtrih}</Text>
+               <Text style={styles.barCodeArticul}>{item.articul}</Text>
+            </View>
+         </View>
+         <View style={styles.productPriceBlockWrapper}>
+            <Text style={styles.productDescription}>
+               {item.description}
+            </Text>
+         </View>
+      </View>
+      )
+   }
    
    return (
       <>
-      {/* <Header
-         navigation={navigation}
-         name={name}
-      /> */}
-         <ScrollView style={styles.wrapper}>
-            <View style={styles.imageNameWrapper}>
-               <Image
-                  style={styles.tinyLogo}
-                  source={{uri: itemData.picture}}
-               />
-               <View style={styles.nameWrapper}>
-                  <Text style={styles.productName}>{itemData.name}</Text>
-               </View>  
-            </View>
-            <View style={styles.productPriceBlockWrapper}>
-               <View style={styles.productPriceBlock}>
-                  <Text style={styles.productPriceText}>{itemData.price}</Text>
-               </View>
-            </View>
-            <View style={styles.productPriceBlockWrapper}>
-               <View style={styles.barCodeArticulWrapper}>
-                  <Text style={styles.barCodeArticul}>{itemData.mainShtrih}</Text>
-                  <Text style={styles.barCodeArticul}>{itemData.articul}</Text>
-               </View>
-            </View>
-            <View style={styles.productPriceBlockWrapper}>
-               <Text style={styles.productDescription}>
-                  {itemData.description}
-               </Text>
-            </View>
-         </ScrollView>
+         <FlatList
+            data={itemData}
+            renderItem={({item}) => <Item item = {item}/>}
+         />
+         
       </>
    )
 }
