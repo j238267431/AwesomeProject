@@ -4,36 +4,16 @@ import { useFonts } from 'expo-font';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import reduxStore from './redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
 
-const defaultState = {
-  cash: 0,
-  isModal: false,
-  authKey: '',
-}
 
-const reducer = (state = defaultState, action) => {
-  switch (action.type){
-    case 'ADD_CASH':
-      return {...state, cash: state.cash + action.payload}
-    case 'GET_CASH':
-      return {...state, cash: state.cash - action.payload}
-    case 'SHOW_MODAL':
-      return {...state, isModal: action.payload}
-    case 'HIDE_MODAL':
-      return {...state, isModal: action.payload}
-    case 'SAVE_AUTH_KEY':
-      return {...state, authKey: action.payload}
-    case 'REMOVE_AUTH_KEY':
-      return {...state, authKey: action.payload}
-    default: 
-      return state;
-  }
-}
 
-const store = createStore(reducer);
+// const store = createStore(reducer);
 
 export default function App() {
 
+  const {store, persistor} = reduxStore();
   const [fontsLoaded] = useFonts({
     'Roboto-Black': require('./assets/fonts/Roboto/Roboto-Black.ttf'),
     'Roboto-Medium': require('./assets/fonts/Roboto/Roboto-Medium.ttf'),
@@ -44,9 +24,11 @@ export default function App() {
   }
   return(   
     <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>
         <Navigation/>
       </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 }
