@@ -1,16 +1,13 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
-import { Header } from '../components/Header';
 
 
 export const ProductScreen = ({route, navigation}) => {
    const [isLoading, setisLoading] = React.useState(true);
    const [items, setItems] = React.useState();
    const {price, name, itemData} = route.params;
-   // console.log('product', itemData);
 
    const Item = ({item}) => {
-      // console.log('fuck', item.articul)
       return (
          
       <View style={styles.wrapper}>
@@ -62,6 +59,7 @@ const styles = StyleSheet.create({
       paddingTop: 12,
       paddingLeft: 15,
       paddingRight: 15,
+      paddingBottom: 12,
    },
    imageNameWrapper:{
       flexDirection: 'row',
@@ -87,17 +85,22 @@ const styles = StyleSheet.create({
       backgroundColor: '#219653',
       borderTopLeftRadius: 50,
       borderBottomRightRadius: 50,
-      // flex:0.1,
+      // flex:0.5,
       justifyContent: "center",
       alignItems: "center",
       width: 300,
-      height: 150,
+      minHeight: 100,
+      padding: 5,
+      // flexWrap: 'wrap'
+      
    },
    productPriceText:{
       fontSize: 72,
       fontWeight: 300,
       fontFamily: 'Roboto-Medium',
       color: '#F2F2F2',
+      
+      
    },
    barCodeArticulWrapper: {
       flexDirection: 'row',

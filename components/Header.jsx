@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     flex: 0.8,
     color: 'white',
     fontWeight: 'bold',
-    verticalAlign: 'bottom',
+    xtAlignVertical: 'bottom',
     fontSize: 20,
     
   },

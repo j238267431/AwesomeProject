@@ -9,12 +9,14 @@ import { StyleSheet, Button, Text, View, Modal } from 'react-native';
 import React from 'react';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import ModalMenuScreen from "./ModalMenu";
+import { useDispatch, useSelector } from "react-redux";
 
-const Stack = createNativeStackNavigator();
+
 
 export const Navigation = () => {
-
-
+   
+   const Stack = createNativeStackNavigator();
+   const dispatch = useDispatch();
    const barCodeImage = (navigation) => {
       return <MaterialCommunityIcons
          onPress={() => {
@@ -34,20 +36,9 @@ export const Navigation = () => {
 
    return (
 
-      <Stack.Navigator
-  
-      
-      >
+      <Stack.Navigator>
 
          <Stack.Group
-            // screenOptions={{ 
-            //    title: 'Проверка цен',
-            //    headerStyle: { backgroundColor: '#2F80ED' }, 
-            //    headerTintColor: '#fff',
-            //    headerTitleStyle: {
-            //    fontWeight: 'bold',
-            //    fontSize: 20
-            //  },}}
              screenOptions={({navigation}) => ({
                title: 'Проверка цен',
                headerStyle: { backgroundColor: '#2F80ED' }, 
@@ -60,22 +51,8 @@ export const Navigation = () => {
              })}
              >
             <Stack.Screen name="Auth" component={AuthScreen} 
-    
-               screenListeners={({ navigation }) => ({
-                  state: (e) => {
-                     // Do something with the state
-                     console.log('state changed', e.data);
-
-                     // Do something with the `navigation` object
-                     if (!navigation.canGoBack()) {
-                     console.log("we're on the initial screen");
-                     }
-                  },
-               })}
             options={{
-               headerLeft: () => (
-                  menuImage()
-               ),
+               
                headerTitleStyle: {
                   fontWeight: 'bold',
                   fontSize: 20,

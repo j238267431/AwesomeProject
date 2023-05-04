@@ -14,6 +14,7 @@ import styled from 'styled-components/native';
 import axios from 'axios';
 import React from 'react';
 import { Loading } from '../components/Loading';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 const Wrapper = styled.View`
@@ -35,14 +36,10 @@ export const AuthScreen = ({ navigation }) => {
   const [isAuth, setIsAuth] = React.useState(false);
   const [isPortrait, setIsPortrait] = React.useState();
   const [error, setError] = React.useState();
-  // console.log(Dimensions.get('screen'));
+  const dispatch = useDispatch();
+  const authKey = useSelector(state => state.authKey);
 
-  const Header = styled.View`
-    flex: 0.1;
-    // hieght: 10px;
-    width: 100%;
-    background-color: #74992e;
-`;
+
 
 Dimensions.addEventListener('change', () => {
   var dim = Dimensions.get('screen');
@@ -59,8 +56,8 @@ console.log(isPortrait);
 
 
     axios
-    // .post("https://test2.isoftik.kz/company/api/login_ajax.php",
-    .post("https://test2.isoftik.kz/login_ajax.php",
+    .post("https://test2.isoftik.kz/company/api/login_ajax.php",
+    // .post("https://test2.isoftik.kz/login_ajax.php",
     {
       password:password,
       login: name,
@@ -76,6 +73,7 @@ console.log(isPortrait);
     console.log('auth_key',data)
     // setIsAuth(data.auth)
     if(data.type == 'login'){
+      dispatch({type:"SAVE_AUTH_KEY", payload: data.authkey})
       setIsAuth(true)
       setItems(data);
       setError('');
@@ -101,13 +99,33 @@ console.log(isPortrait);
     }
   }, [isAuth]) 
 
+
 if(isLoading) {
   return <Loading/>
  }
 
-if(isAuth){
-  navigation.navigate('Home', {nameR:name});
+
+ 
+
+if(authKey){
+  console.log('authKeyAuth', authKey);
+  return (
+    <View style={styles.centeredView}>
+      <Pressable 
+        style={({pressed}) => [{
+            backgroundColor: pressed ? 'rgb(210, 230, 255)' : '#219653',
+          }, 
+          styles.button, styles.buttonOpen
+        ]}
+        onPress={()=> {
+          navigation.navigate("Home")
+        }}
+
+      ><Text style={styles.textStyle}>Нажмите чтобы проверить цену товара по штрихкоду</Text></Pressable>
+    </View>
+  )
 }
+
 
 
   return (
@@ -115,25 +133,7 @@ if(isAuth){
     
     <Wrapper>
     <View style={styles.inputWrapper}>
-    <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
+
       <TextInput
          style={styles.barCodeInput}
          placeholderTextColor="#2F80ED"
@@ -155,8 +155,6 @@ if(isAuth){
         onPress={makeAuth}
          title="Войти"
       />
-      
-
    </Wrapper>
    </>
   );
@@ -164,6 +162,13 @@ if(isAuth){
   
 }
 const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  
   errorText:{
     color: 'red',
     marginTop: 20,
@@ -193,47 +198,20 @@ const styles = StyleSheet.create({
     width: 300,
     height: 200,
     marginBottom:10,
-  },centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   button: {
-    borderRadius: 20,
-    padding: 10,
+    borderRadius: 10,
+    paddingHorizontal: 40,
+    paddingVertical: 20,
+    marginBottom: 20,
     elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
   },
   textStyle: {
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
+  
 })
 
 

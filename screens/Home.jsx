@@ -3,8 +3,8 @@ import styled from 'styled-components/native';
 import axios from 'axios';
 import React from 'react';
 import { Loading } from '../components/Loading';
-import { Header } from '../components/Header';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Wrapper = styled.View`
    padding: 10px;
@@ -29,54 +29,46 @@ export const HomeScreen = ({ navigation, route }) => {
   const [price, setPrice] = React.useState();
   const [itemData, setItemData] = React.useState();
   const [isProductPage, setisProductPage] = React.useState(false);
-  const [isAuthPage, setisAuthPage] = React.useState(false);
   // const {nameR} = route.params;
   const [error, setError] = React.useState();
+  const authKey = useSelector(state => state.authKey)
 
-  const logout = () => {
-    setisLoading(true);
-    axios
-     .get("https://test2.isoftik.kz/login.php?do=logout")
-     .then(({ data }) => {
-        console.log('logout', data);
-        setisAuthPage(true);
-     })
-     
-     .catch(err => {
-       console.log('err', err);
-       Alert.alert('Ошибка', err);
-     }).finally(() => {
-       setisLoading(false);
-     })
-   }
 
+
+console.log('authKeyHOME', authKey);
   const getData = () => {
     // console.log('props', nameR);
     console.log('barcode', barcode);
     setisLoading(true);
     axios
-     .post("https://test2.isoftik.kz/company/ajax.php",
-     {
-        class: 'PriceChecker',
-        method: 'getData',
-        barcode: barcode
-    },
-     {
-       headers: {
-       'Content-Type': 'multipart/form-data'
-     }
-    })
+    //  .post("https://test2.isoftik.kz/company/ajax.php",
+    //  {
+    //     class: 'PriceChecker',
+    //     method: 'getData',
+    //     barcode: barcode
+    // },
+    .post("https://test2.isoftik.kz/company/api/rest.php",
+      {
+        token: authKey,
+        endpoint: 'getItemsByBarcode',
+        barcode: barcode,
+      },
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
      .then(({ data }) => {
       if(data != false){
-        setPrice(data[0].price);
+        // setPrice(data[0].price);
+        console.log(data);
         setItemData(data);
         setisProductPage(true);
         setError('');
+        setBarcode('');
       } else {
         setError('Товар с таким штрихкодом не найден');
       }
-
-      // console.log('dataPrice', data);
 
      })
      .catch(err => {
@@ -97,15 +89,8 @@ export const HomeScreen = ({ navigation, route }) => {
      }
    }
 
-   const goToAuthPage = () => {
-    setisProductPage(false)
-    if(isAuthPage){
-      navigation.navigate('Auth');
-     }
-   }
+  
   React.useEffect(goToProductPage, [isProductPage]) 
-  React.useEffect(goToAuthPage, [isAuthPage]) 
-
 
   if(isLoading) {
    return <Loading/>
@@ -113,10 +98,6 @@ export const HomeScreen = ({ navigation, route }) => {
 
   return (
     <ScrollView style={styles.homeWrapper}>
-      {/* <Header
-        navigation={navigation}
-        // name={nameR}
-      /> */}
       <View style={styles.imageWrapper}>
         <Image
           style={styles.homeImage}

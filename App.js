@@ -2,6 +2,35 @@ import React from 'react';
 import { Navigation } from './screens/Navigation';
 import { useFonts } from 'expo-font';
 import { NavigationContainer } from "@react-navigation/native";
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+
+const defaultState = {
+  cash: 0,
+  isModal: false,
+  authKey: '',
+}
+
+const reducer = (state = defaultState, action) => {
+  switch (action.type){
+    case 'ADD_CASH':
+      return {...state, cash: state.cash + action.payload}
+    case 'GET_CASH':
+      return {...state, cash: state.cash - action.payload}
+    case 'SHOW_MODAL':
+      return {...state, isModal: action.payload}
+    case 'HIDE_MODAL':
+      return {...state, isModal: action.payload}
+    case 'SAVE_AUTH_KEY':
+      return {...state, authKey: action.payload}
+    case 'REMOVE_AUTH_KEY':
+      return {...state, authKey: action.payload}
+    default: 
+      return state;
+  }
+}
+
+const store = createStore(reducer);
 
 export default function App() {
 
@@ -13,67 +42,11 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-  return(   <NavigationContainer>
-  <Navigation/></NavigationContainer>);
+  return(   
+    <Provider store={store}>
+      <NavigationContainer>
+        <Navigation/>
+      </NavigationContainer>
+    </Provider>
+  );
 }
-// import 'react-native-gesture-handler';
-// import * as React from 'react';
-// import { View, Text } from 'react-native';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createDrawerNavigator } from '@react-navigation/drawer';
-
-// function Feed() {
-//   return (
-//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//       <Text>Feed Screen</Text>
-//     </View>
-//   );
-// }
-
-// function Notifications() {
-//   return (
-//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//       <Text>Notifications Screen</Text>
-//     </View>
-//   );
-// }
-
-// function Profile() {
-//   return (
-//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//       <Text>Profile Screen</Text>
-//     </View>
-//   );
-// }
-
-// const Drawer = createDrawerNavigator();
-
-// function MyDrawer() {
-//   return (
-//     <Drawer.Navigator useLegacyImplementation initialRouteName="Feed">
-//       <Drawer.Screen
-//         name="Feed"
-//         component={Feed}
-//         options={{ drawerLabel: 'Home' }}
-//       />
-//       <Drawer.Screen
-//         name="Notifications"
-//         component={Notifications}
-//         options={{ drawerLabel: 'Updates' }}
-//       />
-//       <Drawer.Screen
-//         name="Profile"
-//         component={Profile}
-//         options={{ drawerLabel: 'Profile' }}
-//       />
-//     </Drawer.Navigator>
-//   );
-// }
-
-// export default function App() {
-//   return (
-//     <NavigationContainer>
-//       <MyDrawer />
-//     </NavigationContainer>
-//   );
-// }
