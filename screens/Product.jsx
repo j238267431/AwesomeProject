@@ -1,11 +1,9 @@
 import React from 'react';
-import { View, Image, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { View, Image, Text, StyleSheet, FlatList } from 'react-native';
 
 
-export const ProductScreen = ({route, navigation}) => {
-   const [isLoading, setisLoading] = React.useState(true);
-   const [items, setItems] = React.useState();
-   const {price, name, itemData} = route.params;
+export const ProductScreen = ({route}) => {
+   const {itemData} = route.params;
 
    const Item = ({item}) => {
       return (

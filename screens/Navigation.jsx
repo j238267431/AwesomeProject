@@ -1,22 +1,16 @@
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeScreen } from "./Home";
-import { NavigationContainer } from "@react-navigation/native";
 import { AuthScreen } from "./Auth";
 import { ProductScreen } from './Product';
-import { Header } from "../components/Header";
-import { StyleSheet, Button, Text, View, Modal } from 'react-native'; 
+import { StyleSheet} from 'react-native'; 
 import React from 'react';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import ModalMenuScreen from "./ModalMenu";
-import { useDispatch, useSelector } from "react-redux";
-
-
 
 export const Navigation = () => {
    
    const Stack = createNativeStackNavigator();
-   const dispatch = useDispatch();
    const barCodeImage = (navigation) => {
       return <MaterialCommunityIcons
          onPress={() => {
@@ -28,11 +22,6 @@ export const Navigation = () => {
          color="white" 
       />
    }
-   const menuImage = (navigation) => {
-      return 
-   }
-
-
 
    return (
 
@@ -83,12 +72,6 @@ export const Navigation = () => {
                 }
             })}
                />
-            {/* <Stack.Screen name="Product" component={ProductScreen} options={{
-               title: 'Product',
-               headerRight: () => (
-                  barCodeImage(navigation)
-               ),
-               }}/> */}
             <Stack.Screen name="Product" component={ProductScreen} 
                options={({ navigation }) => ({
                   headerRight: () => (
@@ -98,9 +81,6 @@ export const Navigation = () => {
                }
             />
 
-
-
-            <Stack.Screen name="Header" component={Header} options={{title: 'Header'}}/>
          </Stack.Group>
          <Stack.Group screenOptions={{ presentation: 'modal' }}>
             <Stack.Screen name="ModalMenu" component={ModalMenuScreen} options={{title: 'Меню'}} />
@@ -111,13 +91,8 @@ export const Navigation = () => {
 
 const styles = StyleSheet.create({
    header:{
-     // flex: 1,
      height: 10,
      backgroundColor: 'red',
-   },
-   wrapper:{
-     // flex: 1,
-     // backgroundColor: 'red'
    },
    modal:{
       width: 100,

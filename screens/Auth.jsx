@@ -6,31 +6,19 @@ import {
    Alert, 
    Button,
    Dimensions,
-   Modal,
-   Pressable
+   Pressable,
+   Image
 } from 'react-native';
-import styled from 'styled-components/native';
-
 import axios from 'axios';
 import React from 'react';
 import { Loading } from '../components/Loading';
 import { useSelector, useDispatch } from 'react-redux';
 
-
-const Wrapper = styled.View`
-   padding: 10px;
-   width:100%;
-   height:100%;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-`;
+const REMOTE_GIF = 'https://sample-videos.com/gif/2.gif';
 
 export const AuthScreen = ({ navigation }) => {
 
-  const [modalVisible, setModalVisible] = React.useState(false);
   const [isLoading, setisLoading] = React.useState(false);
-  const [items, setItems] = React.useState();
   const [name, setname] = React.useState();
   const [password, setPassword] = React.useState();
   const [isAuth, setIsAuth] = React.useState(false);
@@ -75,7 +63,6 @@ console.log(isPortrait);
     if(data.type == 'login'){
       dispatch({type:"SAVE_AUTH_KEY", payload: data.authkey})
       setIsAuth(true)
-      setItems(data);
       setError('');
     } else {
       setIsAuth(false)
@@ -101,7 +88,9 @@ console.log(isPortrait);
 
 
 if(isLoading) {
-  return <Loading/>
+  return(
+    <Loading/>
+  )
  }
 
 
@@ -122,6 +111,7 @@ if(authKey){
         }}
 
       ><Text style={styles.textStyle}>Нажмите чтобы проверить цену товара по штрихкоду</Text></Pressable>
+
     </View>
   )
 }
@@ -131,7 +121,7 @@ if(authKey){
   return (
     <>
     
-    <Wrapper>
+    <View style={styles.wrapper}>
     <View style={styles.inputWrapper}>
 
       <TextInput
@@ -155,13 +145,30 @@ if(authKey){
         onPress={makeAuth}
          title="Войти"
       />
-   </Wrapper>
+   </View>
    </>
   );
 
   
 }
 const styles = StyleSheet.create({
+
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#ecf0f1',
+    padding: 8,
+  },
+
+  wrapper: {
+    padding: 10,
+    width:'100%',
+    height:'100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   centeredView: {
     flex: 1,
     justifyContent: 'center',

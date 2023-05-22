@@ -1,43 +1,20 @@
-import { StyleSheet, Text, Image, View, Alert, Button, ScrollView, TextInput, Pressable } from 'react-native';
+import { StyleSheet, Text, Image, View, Alert, ScrollView, TextInput, Pressable } from 'react-native';
 import styled from 'styled-components/native';
 import axios from 'axios';
 import React from 'react';
 import { Loading } from '../components/Loading';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import { useSelector, useDispatch } from 'react-redux';
-
-const Wrapper = styled.View`
-   padding: 10px;
-   width:100%;
-   height:100%;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-`;
-
-const TextInputAuth = styled.TextInput`
-   border: 2px solid black;
-   width: 100%;
-   padding: 10px;
-   margin-bottom: 10px;
-`;
 
 
 export const HomeScreen = ({ navigation, route }) => {
   const [isLoading, setisLoading] = React.useState(false);
-  const [barcode, setBarcode] = React.useState();
-  const [price, setPrice] = React.useState();
+  const [barcode, setBarcode] = React.useState('');
   const [itemData, setItemData] = React.useState();
   const [isProductPage, setisProductPage] = React.useState(false);
-  // const {nameR} = route.params;
   const [error, setError] = React.useState();
   const authKey = useSelector(state => state.authKey)
 
-
-
-console.log('authKeyHOME', authKey);
   const getData = () => {
-    // console.log('props', nameR);
     console.log('barcode', barcode);
     setisLoading(true);
     axios
@@ -60,8 +37,6 @@ console.log('authKeyHOME', authKey);
       })
      .then(({ data }) => {
       if(data != false){
-        // setPrice(data[0].price);
-        console.log(data);
         setItemData(data);
         setisProductPage(true);
         setError('');
@@ -76,9 +51,6 @@ console.log('authKeyHOME', authKey);
        Alert.alert('Ошибка', err);
      }).finally(() => {
        setisLoading(false);
-       
-       console.log('finally', price);
-       
      })
    }
 
@@ -127,7 +99,13 @@ console.log('authKeyHOME', authKey);
             styles.button, styles.buttonOpen
           ]
         }
-        onPress={getData}>
+        onPress={()=>{
+          if(barcode != ''){
+            getData()
+          } else {
+            Alert.alert('Ошибка', 'введите штрих код')
+          }
+        }}>
         <Text style={styles.textStyle}>Проверить</Text>
       </Pressable>
         </View>
@@ -221,7 +199,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textTransform: 'capitalize',
     fontWeight: 'bold',
-    verticalAlign: 'bottom',
+    textAlignVertical: 'bottom',
     fontSize: 20,
     
   },

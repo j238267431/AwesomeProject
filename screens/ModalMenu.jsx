@@ -1,14 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View, TextInput} from 'react-native';
-import { Loading } from '../components/Loading';
-import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
-import { event } from 'react-native-reanimated';
+import { useDispatch } from 'react-redux';
 
 const ModalMenuScreen = ({navigation}) => {
-const [isAuthPage, setisAuthPage] = React.useState(false);
-const [isLoading, setisLoading] = React.useState(false);
-const isModal = useSelector(state => state.isModal)
 const dispatch = useDispatch();
 const [isPassModal, setIsPassModal] = React.useState(false);
 const [password, setPassword] = React.useState();
@@ -26,30 +20,15 @@ const [action, setAction] = React.useState();
     if(defaultPass == password){
       console.log('action', action)
       setIsPassCorrect(true)
+    } else if(typeof password == 'undefined') {
+      setAction('');
+      Alert.alert('Ошибка', 'введите код защиты');
     } else {
       setAction('');
       Alert.alert('Ошибка', 'неверно введен код защиты');
     }
   }
 
-  const logout = () => {
-    setisLoading(true);
-    axios
-     .get("https://test2.isoftik.kz/login.php?do=logout")
-     .then(({ data }) => {
-        console.log('logout', data);
-        setisAuthPage(true);
-     })
-     .catch(err => {
-       console.log('err', err);
-       Alert.alert('Ошибка', err);
-     }).finally(() => {
-       setisLoading(false);
-     })
-   }
-  //  devtest2
-  // testalm
-  // smp
    const goToAuthPage = () => {
     if(isPassCorrect){
       if(action == 'killAuth') {
@@ -59,10 +38,6 @@ const [action, setAction] = React.useState();
      }
    }
    React.useEffect(goToAuthPage, [isPassCorrect]) 
-
-   if(isLoading) {
-    return <Loading/>
-   }
 
   return (
     <View style={styles.centeredView}>

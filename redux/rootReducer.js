@@ -6,10 +6,6 @@ const defaultState = {
  
  const reducer = (state = defaultState, action) => {
    switch (action.type){
-     case 'ADD_CASH':
-       return {...state, cash: state.cash + action.payload}
-     case 'GET_CASH':
-       return {...state, cash: state.cash - action.payload}
      case 'SHOW_MODAL':
        return {...state, isModal: action.payload}
      case 'HIDE_MODAL':
