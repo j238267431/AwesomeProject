@@ -1,4 +1,4 @@
-import { StyleSheet, Text, Image, View, Alert, ScrollView, TextInput, Pressable } from 'react-native';
+import { StyleSheet, Text, Image, View, Alert, ScrollView, TextInput, Pressable, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import axios from 'axios';
 import React from 'react';
@@ -13,6 +13,13 @@ export const HomeScreen = ({ navigation, route }) => {
   const [isProductPage, setisProductPage] = React.useState(false);
   const [error, setError] = React.useState();
   const authKey = useSelector(state => state.authKey)
+  const inputRef = React.useRef();
+
+  const [isPortrait, setIsPortrait] = React.useState();
+  Dimensions.addEventListener('change', () => {
+     console.log('Dimensions');
+     defineOrientation();
+   });
 
   const getData = () => {
     console.log('barcode', barcode);
@@ -51,6 +58,8 @@ export const HomeScreen = ({ navigation, route }) => {
        Alert.alert('Ошибка', err);
      }).finally(() => {
        setisLoading(false);
+       setBarcode('');
+       inputRef.current?.focus();
      })
    }
 
@@ -61,21 +70,60 @@ export const HomeScreen = ({ navigation, route }) => {
      }
    }
 
+   const defineOrientation = () => {
+    var dim = Dimensions.get('screen');
+    setIsPortrait(dim.height >= dim.width ? true : false)
+   }
+
+   const focusInput = () => {
+    inputRef.current?.focus();
+  }
+
   
   React.useEffect(goToProductPage, [isProductPage]) 
+  React.useEffect(defineOrientation, []);
+  React.useEffect(focusInput,[])
 
   if(isLoading) {
    return <Loading/>
   }
 
+   const ItemPortrait = () => {
+    if(isPortrait){
+      return (
+        <>
+          <View style={[styles.imageWrapper, styles.priceCheckWrapper]}>
+            <Text style={[styles.priceCheckText]}>Проверьте цену</Text>
+          </View>
+          <View style={styles.imageWrapper}>
+            <Image
+              style={styles.homeImage}
+              source={require('../assets/box.png')}
+            />
+          </View>
+        </>
+      )
+    } else {
+      return (
+        <View style={styles.landscapeWrapper}>
+          <View style={[styles.imageWrapper, styles.priceCheckWrapper]}>
+            <Text style={[styles.priceCheckText]}>Проверьте цену</Text>
+          </View>
+          <View style={styles.imageWrapper}>
+            <Image
+              style={styles.homeImage}
+              source={require('../assets/box.png')}
+            />
+          </View>
+        </View>
+      )
+    }
+
+  }
+
   return (
     <ScrollView style={styles.homeWrapper}>
-      <View style={styles.imageWrapper}>
-        <Image
-          style={styles.homeImage}
-          source={require('../assets/barcode-scanner.png')}
-        />
-      </View>
+      <ItemPortrait/>
       <View style={styles.wrapper}>
         <View style={{alignItems: 'center'}}>
           <Text style={styles.errorText}>{error}</Text>
@@ -83,11 +131,13 @@ export const HomeScreen = ({ navigation, route }) => {
         <View style={styles.productPriceBlockWrapper}>
         <View style={styles.inputWrapper}>
           <TextInput
+            ref={inputRef}
             style={styles.barCodeInput}
             placeholder="Enter barcode"
             placeholderTextColor="#2F80ED"
             value={barcode}
             onChangeText={setBarcode}
+            onSubmitEditing={getData}
           />
         </View>
         </View>
@@ -116,6 +166,20 @@ export const HomeScreen = ({ navigation, route }) => {
   );
 }
 const styles = StyleSheet.create({
+  landscapeWrapper:{
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  priceCheckWrapper:{
+    marginBottom: 33,
+  },
+  priceCheckText:{
+    fontFamily: 'Roboto-Medium',
+    fontStyle: 'normal',
+    fontWeight: 400,
+    fontSize: 36,
+    lineHeight: 42,
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',

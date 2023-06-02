@@ -14,7 +14,7 @@ export const Navigation = () => {
    const barCodeImage = (navigation) => {
       return <MaterialCommunityIcons
          onPress={() => {
-            navigation.navigate('Home');
+            navigation.navigate('Home', {test:1});
          }} 
          style={styles.headerScan} 
          name="barcode-scan" 
